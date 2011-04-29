@@ -48,11 +48,11 @@ Sprite.prototype.set_anchor = function ()
  */
 Sprite.prototype._render = function (ctx)
 {
-    if (!this._img.loaded) 
+    /*if (!this._img.loaded) 
 	{
 		//alert("image not yet loaded");
 		return;
-	}
+	}*/
 	var top_left = {x:-this._data.dw/2, y:-this._data.dh/2};
 	ctx.translate(top_left.x, top_left.y);
 	ctx.drawImage(this._img, 
@@ -62,6 +62,12 @@ Sprite.prototype._render = function (ctx)
 				  this._data.dw, this._data.dh);
 }
 
+
+//TODO - should we move animation class to its own file?
+/**
+  * class Animation
+  * 
+  */
 Animation = function(x,y,image)
 {
 	Primitive.call(this,x,y);
@@ -94,11 +100,11 @@ Animation.prototype.update = function(dt)
 Animation.prototype._render = function (ctx)
 {
     var data = this._frames[this._frame_index];
-	if (!this._img.loaded) 
+	/*if (!this._img.loaded) 
     {
         alert("image not yet loaded");
         return;
-    }
+    }*/
     var top_left = {x:-data.dw/2, y:-data.dh/2};
     ctx.translate(top_left.x, top_left.y);
 	ctx.drawImage(this._img, 

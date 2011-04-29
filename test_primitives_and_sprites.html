@@ -39,18 +39,18 @@
 				//ctx.drawImage(_img, 300, 300); 
 
 			
-				//sprite = new Sprite(300,300,_img);
-				//sprite.load({sx:20,sy:20,sw:40,sh:40,dw:40,dh:40});
-				//var frames = [{sx:0,sy:0,sw:40,sh:40,dw:40,dh:40,time:200},
-				//              {sx:40,sy:40,sw:40,sh:40,dw:40,dh:40,time:200},
-			//				  {sx:80,sy:80,sw:40,sh:40,dw:40,dh:40,time:200}];
-			    //var anim = new Animation(400,400,_img);
-				//anim.load(frames);
-				//var anim2 = new Animation(600,600,_img);
-				//frames = create_frame_list(_img, 20, {x:20,y:20}, 1000);
-				//anim2.load(frames);
+				sprite = new Sprite(300,300,_img);
+				sprite.load({sx:20,sy:20,sw:40,sh:40,dw:40,dh:40});
+				var frames = [{sx:0,sy:0,sw:40,sh:40,dw:40,dh:40,time:200},
+				              {sx:40,sy:40,sw:40,sh:40,dw:40,dh:40,time:200},
+							  {sx:80,sy:80,sw:40,sh:40,dw:40,dh:40,time:200}];
+			    var anim = new Animation(400,400,_img);
+				anim.load(frames);
+				var anim2 = new Animation(600,600,_img);
+				frames = create_frame_list(_img, 20, {x:20,y:20}, 1000);
+				anim2.load(frames);
 			
-			    /*setInterval(function()
+			    setInterval(function()
                 {
 
                     var bottom = 640;
@@ -76,20 +76,20 @@
                     rect.scale(scale);
                     circ.scale(scale);
                     circ.render(ctx);
-                    //sprite.render(ctx);
+                    sprite.render(ctx);
                     rect.render(ctx);
-            //      sprite.rotate(Math.PI/50);
-            //      sprite.scale(scale);
-            //      sprite.move(circ_adder);
-                //  anim.update(50);
-            //      anim.render(ctx);
-            //      anim2.update(500);
-            //        anim2.render(ctx);
-        //          anim.rotate(Math.PI/50);
+                  sprite.rotate(Math.PI/50);
+                  sprite.scale(scale);
+                  sprite.move(circ_adder);
+                  anim.update(50);
+                  anim.render(ctx);
+                  anim2.update(500);
+                    anim2.render(ctx);
+                  anim.rotate(Math.PI/50);
                     
                     
                     
-                },50);*/
+                },50);
 
 			    		
     		};
