@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>pqrsjs</title>
+		<meta name="author" content="Kyle Ludwig" /> 
+        <meta name="Content-Script-Type" content="text/javascript" /> 
+        <meta name="Content-Style-Type" content="text/css" />
+        <script type="text/javascript" src="src/primitives.js"></script>
+		<script type="text/javascript" src="src/sprites.js"></script>
+		<style type="text/css"> 
+            #screen {border: 2px solid #000;}
+        </style>
+		<script type="text/javascript">
+
+			window.onload = function()
+			{
+			    var canvas = document.getElementById('screen');
+			    var ctx = canvas.getContext('2d');
+				draw_rectangle(ctx, 10, 10, 10, 10, '#00f');
+				trace_rectangle(ctx, 25, 25, 10, 10, '#0ff');
+				draw_circle(ctx, 40, 40, 10, '#ff0');
+				trace_circle(ctx, 60, 60, 10, '#f00');
+				var circ = new Circle(100, 100, 20, '#f0f', true);
+				var rect = new Rectangle(200, 100, 20, 20, '#f00', true);
+                var rect_adder = {x:5,y:5};
+                var circ_adder = {x:5,y:5}; 
+				rect.angle = Math.PI/4;
+				var scale = {x:1,y:1}; 
+				var _img = new Image();
+                _img.onload = function() 
+				{ 
+                    //this.loaded = true;
+                    ctx.drawImage(_img, 300, 300);
+                    alert("image loaded");
+                };
+                _img.src = "res/2.jpg";				
+				
+				//ctx.drawImage(_img, 300, 300); 
+
+			
+				//sprite = new Sprite(300,300,_img);
+				//sprite.load({sx:20,sy:20,sw:40,sh:40,dw:40,dh:40});
+				//var frames = [{sx:0,sy:0,sw:40,sh:40,dw:40,dh:40,time:200},
+				//              {sx:40,sy:40,sw:40,sh:40,dw:40,dh:40,time:200},
+			//				  {sx:80,sy:80,sw:40,sh:40,dw:40,dh:40,time:200}];
+			    //var anim = new Animation(400,400,_img);
+				//anim.load(frames);
+				//var anim2 = new Animation(600,600,_img);
+				//frames = create_frame_list(_img, 20, {x:20,y:20}, 1000);
+				//anim2.load(frames);
+			
+			    /*setInterval(function()
+                {
+
+                    var bottom = 640;
+                    var right = 760;
+                    ctx.fillStyle='rgba(255,255,255,1)';
+                    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+                    if (circ._x > right) circ_adder.x = -5;
+                    if (circ._y > bottom)circ_adder.y = -5;
+                    if (rect._x > right) rect_adder.x = -5;
+                    if (rect._y > bottom)rect_adder.y = -5;
+                    if (circ._x < 0)     circ_adder.x = 5;
+                    if (circ._y < 0)     circ_adder.y = 5;
+                    if (rect._x < 0)     rect_adder.x = 5;
+                    if (rect._y < 0)     rect_adder.y = 5;
+                                    
+                    circ.move(circ_adder);
+                                        //rect.x += rect_adder.x;
+                    //rect.y += rect_adder.y;
+                    rect.rotate(Math.PI/8);
+                    scale.x += 0.01;
+                    scale.y += 0.01;
+                    rect.scale(scale);
+                    circ.scale(scale);
+                    circ.render(ctx);
+                    //sprite.render(ctx);
+                    rect.render(ctx);
+            //      sprite.rotate(Math.PI/50);
+            //      sprite.scale(scale);
+            //      sprite.move(circ_adder);
+                //  anim.update(50);
+            //      anim.render(ctx);
+            //      anim2.update(500);
+            //        anim2.render(ctx);
+        //          anim.rotate(Math.PI/50);
+                    
+                    
+                    
+                },50);*/
+
+			    		
+    		};
+
+        </script> 
+    </head>
+    <body>
+		<div id="content"> 
+            <h1>Screen</h1>
+			<canvas id="screen" width="760" height="640">This page requires a browser that supports html5 Canvas.</canvas> 
+        </div>
+    </body>
+</html>
