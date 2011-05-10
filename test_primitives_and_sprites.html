@@ -17,11 +17,26 @@
 			{
 			    var canvas = document.getElementById('screen');
 			    var ctx = canvas.getContext('2d');
+				
 				draw_rectangle(ctx, 10, 10, 10, 10, '#00f');
 				trace_rectangle(ctx, 25, 25, 10, 10, '#0ff');
 				draw_circle(ctx, 40, 40, 10, '#ff0');
 				trace_circle(ctx, 60, 60, 10, '#f00');
-				var circ = new Circle(100, 100, 20, '#f0f', true);
+				var circ = new Circle(100, 100, 20, '#f0f', false);
+				var pointer = {x:0,y:0};
+				canvas.addEventListener("mousemove", function(e) 
+				{
+					var x = e.clientX-canvas.offsetLeft;
+					var y = e.clientY-canvas.offsetTop;
+					pointer = {x:x,y:y};
+					//alert(pointer.x, pointer.y);
+					//
+					//alert(circ._x, circ._y);
+					
+					
+					
+				},false);
+				
 				var rect = new Rectangle(200, 100, 20, 20, '#f00', true);
                 var rect_adder = {x:5,y:5};
                 var circ_adder = {x:5,y:5}; 
@@ -67,7 +82,7 @@
                     if (rect._x < 0)     rect_adder.x = 5;
                     if (rect._y < 0)     rect_adder.y = 5;
                                     
-                    circ.move(circ_adder);
+                    //circ.move(circ_adder);
                                         //rect.x += rect_adder.x;
                     //rect.y += rect_adder.y;
                     rect.rotate(Math.PI/8);
@@ -75,6 +90,18 @@
                     scale.y += 0.01;
                     rect.scale(scale);
                     circ.scale(scale);
+					if (circ._contains(pointer)) 
+					{
+						//alert(pointer.x, pointer.y);
+						circ._color = '#0f0';
+					}
+					else circ._color = '#f0f';
+					if (rect._contains(pointer)) 
+					{
+						//alert(pointer.x, pointer.y);
+						rect._color = '#0f0';
+					}
+					else rect._color = '#f0f';
                     circ.render(ctx);
                     sprite.render(ctx);
                     rect.render(ctx);

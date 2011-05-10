@@ -70,6 +70,23 @@ Rectangle.prototype._render = function (ctx)
 }
 
 /**
+ * Check if a point is inside the rectangle
+ */
+Rectangle.prototype._contains = function (point)
+{
+    var bottom = this._y+this._h/2*this._scale.y;
+	var top = this._y-this._h/2*this._scale.y;
+	var left = this._x-this._w/2*this._scale.x;
+	var right = this._x+this._w/2*this._scale.x;
+	
+	if (point.y < top)    return false;
+	if (point.y > bottom) return false;
+	if (point.x < left)   return false;
+	if (point.x > right)  return false;
+	return true;
+}
+
+/**
   * class Circle
   * 
   */
@@ -93,6 +110,16 @@ Circle.prototype._render = function (ctx)
 	this._draw(ctx, 0, 0, this._r, this._color);
 }
 
+/**
+ * Check if a point is inside the Circle
+ */
+Circle.prototype._contains = function (point)
+{
+	var centre = {x:this._x,y:this._y};
+	var distance = get_distance(centre, point);
+	if (distance <= this._r*this._scale.x) return true;
+	return false;
+}
 
 /**
  * Draw a circle
@@ -140,4 +167,12 @@ function trace_rectangle(ctx, x, y, h, w, color)
     ctx.closePath();//lineTo(x, y);
     ctx.strokeStyle = color;
     ctx.stroke();
+}
+
+/**
+ * Find the distance between two points
+ */
+ function get_distance(point1, point2)
+{
+	return Math.sqrt(Math.pow((point2.x - point1.x), 2) + Math.pow((point2.y - point1.y), 2));
 }
