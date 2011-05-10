@@ -37,6 +37,19 @@
 					
 				},false);
 				
+				document.addEventListener("mousemove", function(e) 
+				{
+					var x = e.clientX-canvas.offsetLeft;
+					var y = e.clientY-canvas.offsetTop;
+					pointer = {x:x,y:y};
+					//alert(pointer.x, pointer.y);
+					//
+					//alert(circ._x, circ._y);
+					
+					
+					
+				},false);
+				
 				var rect = new Rectangle(200, 100, 20, 20, '#f00', true);
                 var rect_adder = {x:5,y:5};
                 var circ_adder = {x:5,y:5}; 
