@@ -28,7 +28,8 @@ Game = function (canvas, interval)
  */
 Game.prototype.update = function ()
 {
-    for (var index in this._actives)
+    if (this.pre_update) this.pre_update(this.interval);
+	for (var index in this._actives)
     {
         this._actives[index].update(this.interval);
     }

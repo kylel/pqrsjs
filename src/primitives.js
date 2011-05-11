@@ -121,6 +121,56 @@ Circle.prototype._contains = function (point)
 	return false;
 }
 
+/**
+  * class Line
+  * 
+  */
+
+Line = function (a,b,color)
+{
+    this._y_length = b.y-a.y;
+	this._x_length = b.x-a.x;
+	this.a = a;
+	this.b = b;
+	
+	Primitive.call(this,a.x+this._x_length/2,a.y+this._y_length/2);
+	
+    this._color = color;
+    this._draw = draw_line;
+}
+
+Line.prototype = new Primitive;
+
+/**
+ * Draw the line
+ */
+Line.prototype._render = function (ctx)
+{
+	var a = {x : -this._x_length/2,
+	         y : -this._y_length/2};
+	var b = {x : this._x_length/2,
+	         y : this._y_length/2};
+	this._draw(ctx, a, b, this._color);
+}
+
+/**
+ * Change the line data
+ */
+Line.prototype.change = function (a,b,color)
+{
+    new_a = a||this.a;
+	new_b = b||this.b;
+	new_color = color||this._color;
+	
+	this._y_length = new_b.y-new_a.y;
+	this._x_length = new_b.x-new_a.x;
+	this.a = new_a;
+	this.b = new_b;
+	this._color = color;
+	this._x = new_a.x+this._x_length/2;
+	this._y = new_a.y+this._y_length/2;
+}
+
 
 //Functions-----------------------------------------------------|
 
@@ -157,6 +207,20 @@ function draw_rectangle(ctx, x, y, h, w, color)
 {
 	ctx.fillStyle= color;
 	ctx.fillRect(x,y,w,h);
+}
+
+/**
+ * Draw a line
+ */
+function draw_line(ctx, a, b, color)
+{
+
+	ctx.beginPath();
+	ctx.moveTo(a.x, a.y);
+	ctx.lineTo(b.x, b.y);
+	ctx.closePath();
+    ctx.strokeStyle = color;
+    ctx.stroke();
 }
 
 /**
@@ -210,4 +274,12 @@ function bounding_circle_collision(body1, body2)
 
     if (dist > reach) return null;
     return reach-dist;
+}
+
+function point_diff(a,b)
+{
+	var diff = {};
+	diff.x = b.x-a.x;
+	diff.y = b.y-a.y;
+	return diff;
 }
