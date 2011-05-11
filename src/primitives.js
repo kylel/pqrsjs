@@ -283,3 +283,25 @@ function point_diff(a,b)
 	diff.y = b.y-a.y;
 	return diff;
 }
+
+function magnitude(vector)
+{
+	return Math.sqrt(vector.x*vector.x + vector.y*vector.y);
+}
+
+function unit_vector(vector)
+{
+	var mag = magnitude(vector);
+	var unit = {};
+	unit.x = vector.x/mag;
+	unit.y = vector.y/mag;
+	return unit;
+}
+
+function vector_by_scalar(vector, scalar)
+{
+	var vec = {};
+	vec.x = vector.x*scalar;
+	vec.y = vector.y*scalar;
+	return vec;
+}
