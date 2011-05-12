@@ -1,3 +1,6 @@
+ /*- TODO: remove contains functions to keep this as a simple
+     graphics primitives lib.
+*/
 /**
   * class Primitive
   * 
@@ -41,6 +44,11 @@ Primitive.prototype.move = function(vector)
 	this._y += vector.y
 }
 
+Primitive.prototype.set_position = function(point)
+{
+    this._x = point.x;
+	this._y = point.y
+}
 
 
 /**
@@ -101,6 +109,16 @@ Circle = function (x,y,r,color,empty)
 }
 
 Circle.prototype = new Primitive;
+
+/**
+ * Scale the circle. Overwrites the primitive base class method because scaling a circle
+ * by x AND y values will make it an oval.
+ */
+Circle.prototype.scale = function(factor)
+{
+	//TODO - check if the factor is scalar?
+	this._scale = {x:factor,y:factor};
+}
 
 /**
  * Draw the circle
@@ -236,72 +254,4 @@ function trace_rectangle(ctx, x, y, h, w, color)
     ctx.closePath();
     ctx.strokeStyle = color;
     ctx.stroke();
-}
-
-/**
- * Find the distance between two points
- */
-function get_distance(point1, point2)
-{
-	return Math.sqrt(Math.pow((point2.x - point1.x), 2) + Math.pow((point2.y - point1.y), 2));
-}
-
-function get_distance_4(x1,y1,x2,y2) //TODO: put this in a class for better organisation
-{
-    return Math.sqrt(Math.pow((x2-x1), 2) + Math.pow((y2-y1), 2));
-}
-
-function bounding_box_collision(body1, body2)
-{
-    var top = Math.max(body1.top(), body2.top());
-    var bottom = Math.min(body1.bottom(), body2.bottom());
-    var left = Math.max(body1.left(), body2.left());
-    var right = Math.min(body1.right(), body2.right());
-
-    if (top > bottom || left > right) return null;
-    var depth = {};
-    depth.y = bottom - top;
-    depth.x = right - left;
-    return depth;
-}
-
-function bounding_circle_collision(body1, body2)
-{
-    centre1 = body1.centre();
-    centre2 = body2.centre();
-    var dist = get_distance_4(centre1.x, centre1.y, centre2.x, centre2.y);
-    var reach = body1.r + body2.r;
-
-    if (dist > reach) return null;
-    return reach-dist;
-}
-
-function point_diff(a,b)
-{
-	var diff = {};
-	diff.x = b.x-a.x;
-	diff.y = b.y-a.y;
-	return diff;
-}
-
-function magnitude(vector)
-{
-	return Math.sqrt(vector.x*vector.x + vector.y*vector.y);
-}
-
-function unit_vector(vector)
-{
-	var mag = magnitude(vector);
-	var unit = {};
-	unit.x = vector.x/mag;
-	unit.y = vector.y/mag;
-	return unit;
-}
-
-function vector_by_scalar(vector, scalar)
-{
-	var vec = {};
-	vec.x = vector.x*scalar;
-	vec.y = vector.y*scalar;
-	return vec;
 }
