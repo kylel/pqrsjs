@@ -1,19 +1,27 @@
-
+window.requestAnimFrame = (function(){
+	return 	window.requestAnimationFrame		||
+			window.webkitRequestAnimationFrame	||
+			window.mozRequestAnimationFrame		||
+			window.oRequestAnimationFrame		||
+			window.msRequestAnimationFrame		||
+			function (callback, element){
+				window.setTimeout(callback, 1000/60);
+			};
+})();
 
 /**
   * class Game
   * 
   */
-
-Game = function (canvas, interval)
+Game = function (canvas)
 {
     this._visibles = [];
     this._actives = [];
+	this._timer = new Timer();
 	
-	if (canvas && interval) 
+	if (canvas) 
 	{
 		this.canvas = canvas;
-		this.interval = interval;
 		this.ctx = canvas.getContext('2d');
 		this._canvasBuffer = document.createElement('canvas');
 		this._canvasBuffer.width = this.canvas.width;
@@ -23,22 +31,15 @@ Game = function (canvas, interval)
 	this._paused = false;
 }
 
-/**
- * 
- */
-Game.prototype.update = function ()
+Game.prototype.update = function (dt)
 {
-    if (this.pre_update) this.pre_update(this.interval);
+    if (this.preUpdate) this.preUpdate(dt);
 	for (var index in this._actives)
     {
-        this._actives[index].update(this.interval);
+        this._actives[index].update(dt);
     }
 }
 
-
-/**
- * 
- */
 Game.prototype.draw = function ()
 {
     this._canvasBufferContext.fillStyle = '#fff';
@@ -50,20 +51,22 @@ Game.prototype.draw = function ()
     this.ctx.drawImage(this._canvasBuffer, 0, 0); //double buffering
 }
 
+Game.prototype.pause = function ()
+{
+    this._paused = true;
+}
 
-/**
- * 
- */
+Game.prototype.resume = function ()
+{
+    this._paused = false;
+}
+
 Game.prototype.add = function (game_obj)
 {
     if (game_obj.render) this._visibles.push(game_obj);
 	if (game_obj.update) this._actives.push(game_obj);
 }
 
-
-/**
- * 
- */
 Game.prototype.remove = function (game_obj)
 {
     var i = -1;
@@ -80,41 +83,21 @@ Game.prototype.remove = function (game_obj)
     }
 }
 
+Game.prototype.loop = function ()
+{
+    this._dt = this._timer.tick();
+	if (!this._paused)
+	{
+		this.update(this._dt);
+		this.draw();
+	}
+}
 
-/**
- * 
- */
 Game.prototype.start = function ()
 {
-    start_game_loop(this);
-}
-
-/**
- * 
- */
-Game.prototype.set_interval = function (interval)
-{
-    if (interval) this.interval = interval;
-}
-
-Game.prototype.pause = function ()
-{
-    this._paused = true;
-}
-
-Game.prototype.resume = function ()
-{
-    this._paused = false;
-}
-
-function start_game_loop(game)
-{
-    game.stepper = setInterval(function()
-    {
-        if (!game._paused)
-		{
-			game.update();
-            game.draw();
-		}
-    },game.interval);
+	var that = this;
+	(function gameLoop() {
+		that.loop();
+		requestAnimFrame(gameLoop, that.canvas);
+	})();
 }

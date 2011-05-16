@@ -9,6 +9,7 @@
         <script type="text/javascript" src="src/primitives.js"></script>
 		<script type="text/javascript" src="src/geometry.js"></script>
 		<script type="text/javascript" src="src/input_handler.js"></script>
+		<script type="text/javascript" src="src/timer.js"></script>
 		<script type="text/javascript" src="src/game.js"></script>
 		<script type="text/javascript" src="src/tds_game.js"></script>
 		<style type="text/css"> 
@@ -18,13 +19,12 @@
 
 			window.onload = function()
 			{
-				//document.body.style.cursor = 'none';
 			    var canvas = document.getElementById('screen');
 				canvas.onmouseover=function () {this.style.cursor = 'none';};
 			    var ctx = canvas.getContext('2d');
 				
 				var ih = new InputHandler(canvas);
-				var tds_game = new TdsGame(canvas, 10, ih);
+				var tds_game = new TdsGame(canvas, ih);
 				
 				tds_game.start();
 				

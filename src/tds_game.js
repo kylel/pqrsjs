@@ -1,4 +1,86 @@
 /**
+  * class Bullet
+  * 
+  */
+
+Bullet = function (pos, vel)
+{
+	this._pos = pos;
+	this._vel = vel;
+	this._visible = new Circle(this._pos.x,this._pos.y,5,'#00f');
+}
+
+Bullet.prototype.update = function(dt)
+{
+	this._pos = this._pos.add(this._vel.multiply(dt));
+	this._visible.setPosition(this._pos);
+}
+
+Bullet.prototype.render = function(ctx)
+{
+	this._visible.render(ctx);
+}
+
+/**
+  * class Gun
+  * 
+  */
+
+Gun = function (name, player, clip_size, vel)
+{
+	this._player = player;
+	this._pos = this._player._pos; //TODO - player get pos?
+	// TODO this._visible = new Line(new Vector2D(this._player._pos.x, this._player._pos.y), new Vector2D());
+	this.name = name;
+	this._weapon = null;
+	this._ammo = 0;
+	this.clip_size = clip_size;
+	this._bullet_vel = 10;
+	this._bullets = [];
+}
+
+Gun.prototype.fire = function(target)
+{
+	if (this._ammo == 0) return;
+	this._ammo = this._ammo - 1;
+	//create a bullet
+	var direction = (target.subtract(this._pos)).unit();
+	
+	var bullet = new Bullet(this._pos, direction.multiply(this._bullet_vel));
+	
+	this._player._game.add(bullet);
+	
+	this._bullets.push(bullet);
+}
+
+Gun.prototype.load = function(ammo)
+{
+	var rounds = ammo || this.clip_size;
+	var empties = this.clip_size - this._ammo;
+	if (rounds>=empties)
+	{
+		this._ammo = this.clip_size;
+		return empties;
+	}
+	if (rounds<empties)
+	{
+		this._ammo += rounds;
+		return rounds;
+	}
+}
+
+Gun.prototype.update = function(dt)
+{
+	this._pos = this.player._pos;
+	for (bullet in this._bullets) this._bullets[bullet].update(dt);
+}
+
+Gun.prototype.render = function(ctx)
+{
+	for (bullet in this._bullets) this._bullets[bullet].render(ctx);
+}
+
+/**
   * class TdsGame
   * 
   */
@@ -8,12 +90,15 @@ Player = function (pos,game)
 	this._game = game;
 	this._pos = pos;
 	this._visible = new Circle(pos.x,pos.y,10,'#f00');
-	this._weapon = null;
+	this._weapon = new Gun("launcher", this, 10, 10);
+	this._weapon.load(10);
+	//this._weapon = null;
 	this._vel = new Vector2D();
+	this._target = new Vector2D();
 	//this._acc = new Vector2D(); // TODO - add acceleration!!!
 	
-	//this._weapons = []; // TODO - implement weapons!!!
-	//this._current_weapon = "Rocket Launcher";
+	//this._weapons = [new Gun("launcher", this, 5, 10)]; // TODO - implement weapons!!!
+	//this._current_weapon = "launcher";
 	
 	this._keymap = {87 : 'up',
 	                65 : 'left',
@@ -33,6 +118,19 @@ Player.prototype.update = function (dt)
 		
 	this._visible._x = this._pos.x;
 	this._visible._y = this._pos.y;
+	
+	if (this._mouse_state)
+	{
+		/*if (!this._bullet)
+		{
+			var mouse_pos = new Vector2D(x,y);
+			this._bullet = new Circle(this._pos.x,this._pos.y,5,'#00f');
+			this._bullet.vel = (mouse_pos.subtract(this._pos)).unit();//this._pos.subtract(mouse_pos);
+			this._game.add(this._bullet);
+		}*/
+		var mouse_pos = new Vector2D(this._target.x,this._target.y);
+		this._weapon.fire(mouse_pos);
+	}
 	
 	if (this._bullet)
 	{
@@ -54,7 +152,7 @@ Player.prototype.render = function (ctx)
 	this._visible.render(ctx);
 }
 
-Player.prototype.change_key = function(key, state)
+Player.prototype.changeKey = function(key, state)
 {
 	this._keys[this._keymap[key]] = state;
 }
@@ -62,16 +160,7 @@ Player.prototype.change_key = function(key, state)
 Player.prototype.click = function(x, y, state)
 {
 	this._mouse_state = state;
-	if (this._mouse_state)
-	{
-		if (!this._bullet)
-		{
-			var mouse_pos = new Vector2D(x,y);
-			this._bullet = new Circle(this._pos.x,this._pos.y,5,'#00f');
-			this._bullet.vel = (mouse_pos.subtract(this._pos)).unit();//this._pos.subtract(mouse_pos);
-			this._game.add(this._bullet);
-		}
-	}
+	this._target = new Vector2D(x,y);
 }
 
 /**
@@ -79,9 +168,9 @@ Player.prototype.click = function(x, y, state)
   * 
   */
 
-TdsGame = function (canvas, interval, ih)
+TdsGame = function (canvas, ih)
 {
-    Game.call(this, canvas, interval);
+    Game.call(this, canvas);
 	this._input_handler = ih;
 	
 	var centre = {x : this.canvas.width/2,
@@ -97,16 +186,16 @@ TdsGame = function (canvas, interval, ih)
 
 	this.add(this.line);
 	this.add(this.player);
-	
+	this._input_handler.start();
 }
 
 TdsGame.prototype = new Game;
 
-TdsGame.prototype.pre_update = function (dt)
+TdsGame.prototype.preUpdate = function (dt)
 {
-	var pointer = this._input_handler.get_mouse_position_canvas();
+	var pointer = this._input_handler.getMousePositionCanvas();
 	var pointa = {x:this.player._pos.x,y:this.player._pos.y};
-	var pointb = this._input_handler.get_mouse_position_canvas();
+	var pointb = this._input_handler.getMousePositionCanvas();
 	
 	var diff = point_diff(pointa,pointb);
 	

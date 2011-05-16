@@ -44,7 +44,7 @@ Primitive.prototype.move = function(vector)
 	this._y += vector.y
 }
 
-Primitive.prototype.set_position = function(point)
+Primitive.prototype.setPosition = function(point)
 {
     this._x = point.x;
 	this._y = point.y
