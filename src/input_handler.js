@@ -19,7 +19,7 @@ InputHandler.prototype.register = function (client)
 
 InputHandler.prototype._changeKey = function (key, state)
 {
-    for (var client in this._key_clients)
+	for (var client in this._key_clients)
     {
         this._key_clients[client].changeKey(key, state);
     }

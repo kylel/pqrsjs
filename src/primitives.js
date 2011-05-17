@@ -10,13 +10,14 @@ Primitive = function (x,y)
 {
     this._x = x;
     this._y = y;
+	this._scale = {x:1,y:1};
 }
 
 Primitive.prototype.render = function(ctx)
 {
     ctx.save();
 	ctx.translate(this._x, this._y);
-	if (this._angle) ctx.rotate(-this._angle);
+	if (this.angle) ctx.rotate(-this.angle);
 	if (this._scale) ctx.scale(this._scale.x, this._scale.y);
 	this._render(ctx);
 	ctx.restore();
@@ -29,13 +30,14 @@ Primitive.prototype._render = function(ctx)
 
 Primitive.prototype.scale = function(factor)
 {
-	this._scale = {x:factor.x,y:factor.y};
+	this._scale.x *= factor.x;
+	this._scale.y *= factor.y;
 }
 
 Primitive.prototype.rotate = function(angle)
 {
-    if (this._angle) this._angle += angle;
-	else this._angle = angle;
+    if (this.angle) this.angle += angle;
+	else this.angle = angle;
 }
 
 Primitive.prototype.move = function(vector)

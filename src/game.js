@@ -33,10 +33,20 @@ Game = function (canvas)
 
 Game.prototype.update = function (dt)
 {
-    if (this.preUpdate) this.preUpdate(dt);
+    var to_remove = [];
+	if (this.preUpdate) this.preUpdate(dt);
 	for (var index in this._actives)
     {
         this._actives[index].update(dt);
+		if (this._actives[index].to_remove) to_remove.push(this._actives[index]);
+    }
+	for (var index in this._visibles)
+    {
+        if (this._visibles[index].to_remove) to_remove.push(this._visibles[index]);
+    }
+	for (var index in to_remove)
+    {
+        this.remove(to_remove[index]);
     }
 }
 

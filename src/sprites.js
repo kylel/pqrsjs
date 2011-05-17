@@ -8,7 +8,7 @@ Sprite = function (x,y,image)
     Primitive.call(this,x,y);
 	this._img = image;
 	this._data = {sx:0, sy:0,
-	              sw:image.naturalWidth, sh:image.naturalHeight,
+				  sw:image.naturalWidth, sh:image.naturalHeight,
 				  dw:image.naturalWidth, dh:image.naturalHeight};
 }
 
