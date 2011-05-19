@@ -34,7 +34,6 @@ Game = function (canvas)
 Game.prototype.update = function (dt)
 {
     var to_remove = [];
-	if (this.preUpdate) this.preUpdate(dt);
 	for (var index in this._actives)
     {
         this._actives[index].update(dt);

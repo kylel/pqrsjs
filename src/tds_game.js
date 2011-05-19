@@ -39,13 +39,11 @@ Gun = function (game, name, player, clip_size, vel)
 	this._game = game;
 	this._player = player;
 	this._pos = this._player._pos; //TODO - player get pos?
-	// TODO this._visible = new Line(new Vector2D(this._player._pos.x, this._player._pos.y), new Vector2D());
 	this.name = name;
 	this._weapon = null;
 	this._ammo = 0;
 	this.clip_size = clip_size;
 	this._bullet_vel = vel;
-	//this._bullets = [];
 	this._visible = new Line(this._pos,this._pos, '#f0f');
 	this._game.add(this);
 	this._rate = 2;//bullets per second
@@ -56,16 +54,14 @@ Gun.prototype.fire = function(target)
 {
 	if (this._ammo == 0) return;
 	if (this._time_since_last_bullet < 1/this._rate) return;
+
 	this._ammo = this._ammo - 1;
-	//create a bullet
+
 	var direction = (target.subtract(this._pos)).unit();
-	
 	var bullet = new Bullet(this._game, this._pos, direction.multiply(this._bullet_vel));
-	
 	this._game.add(bullet);
+
 	this._time_since_last_bullet = 0;
-	
-	//this._bullets.push(bullet);
 }
 
 Gun.prototype.load = function(ammo)
@@ -92,16 +88,14 @@ Gun.prototype.update = function(dt)
 	this._target = this._target.subtract(this._pos);
 	
 	this._target = this._target.unit().multiply(10);
-	this._visible.change(this._pos, this._target);
-	//for (bullet in this._bullets) this._bullets[bullet].update(dt);
+	this._visible.change(this._pos, this._pos.add(this._target));
+
 	this._time_since_last_bullet += dt;
 }
 
 Gun.prototype.render = function(ctx)
 {
-	this._visible.change(this._pos, this._pos.add(this._target));
 	this._visible.render(ctx);
-	//for (bullet in this._bullets) this._bullets[bullet].render(ctx);
 }
 
 /**
@@ -115,9 +109,7 @@ Player = function (pos,game)
 	this._pos = pos;
 	this._game.add(this);
 
-	//new Circle(pos.x,pos.y,10,'#f00');
 	this._weapon = new Gun(game, "launcher", this, 10, 500);
-	//this._game.add(this._weapon);
 	this._weapon.load(10);
 
 	this._vel = new Vector2D();
@@ -144,14 +136,12 @@ Player.prototype.update = function (dt)
 		this._weapon.load(10);
 		this._keys.reload = 0;
 	}
-	//if (this._pos != this._weapon._pos) alert("wtf");
+
 	this._vel.y = this._keys.down  - this._keys.up;
 	this._vel.x = this._keys.right - this._keys.left;
 	this._vel = this._vel.multiply(80);
 			
 	this._pos = this._pos.add(this._vel.multiply(dt));
-	//this._target = this._game._input_handler.getMousePositionCanvas();
-	//var diff = (new Vector2D(this._target.x, this._target.y)).subtract(this._pos);
 	var direction = this._vel.unit();
 	
 	if (this._vel.magnitude() > 0) this._feet.angle = Math.atan2(direction.x,direction.y);
@@ -220,8 +210,9 @@ TdsGame = function (canvas, ih)
 	this.player = new Player(new Vector2D(centre.x,centre.y), this);
 	
 	this._input_handler.register(this.player);
-	//this.add(this.player);
 	this._input_handler.start();
+
+	/*CAUTION HACK AHEAD!!!! TODO - cleanup*/
 	this._start = this.start;
 	this.ready = function()
 	{
@@ -236,8 +227,3 @@ TdsGame = function (canvas, ih)
 }
 
 TdsGame.prototype = new Game;
-
-TdsGame.prototype.preUpdate = function (dt)
-{
-}
-

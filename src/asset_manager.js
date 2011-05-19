@@ -23,15 +23,23 @@ AssetManager.prototype.downloadAll = function(callback)
 		var path = this._download_queue[i];
 		var img = new Image();
 		var that = this;
-		this._cache[path] = img;
-		img.addEventListener("load", function() {
+		/*img.addEventListener("load", function() {
 			that._success_count += 1;
 			if (that._isDone()) callback();
 		});
 		img.addEventListener("error", function() {
 			that._error_count += 1;
 			if (that._isDone()) callback();
-		});
+		});*/
+		img.onload = function() { /*add event listener not working for firefox*/
+			that._success_count += 1;
+			if (that._isDone()) callback();
+		};
+		img.onerror = function() {
+			that._error_count += 1;
+			if (that._isDone()) callback();
+		};
+		this._cache[path] = img;
 		img.src = path;
 	}
 }
