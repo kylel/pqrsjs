@@ -48,11 +48,6 @@ Sprite.prototype.set_anchor = function ()
  */
 Sprite.prototype._render = function (ctx)
 {
-    /*if (!this._img.loaded) 
-	{
-		//alert("image not yet loaded");
-		return;
-	}*/
 	var top_left = {x:-this._data.dw/2, y:-this._data.dh/2};
 	ctx.translate(top_left.x, top_left.y);
 	ctx.drawImage(this._img, 
@@ -83,7 +78,7 @@ Animation.prototype.load = function(frames)
 {
     this._frames = frames;
     this._frame_index = 0;
-    this._frame_duration = this._frames[this._frame_index].time;		
+    this._frame_duration = this._frames[0].time;		
 }
 
 Animation.prototype.update = function(dt)

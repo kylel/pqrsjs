@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>pqrsjs</title>
+		<meta name="author" content="Kyle Ludwig" /> 
+        <meta name="Content-Script-Type" content="text/javascript" /> 
+        <meta name="Content-Style-Type" content="text/css" />
+        <script type="text/javascript" src="src/primitives.js"></script>
+		<script type="text/javascript" src="src/geometry.js"></script>
+		<script type="text/javascript" src="src/sprites.js"></script>
+		<script type="text/javascript" src="src/asset_manager.js"></script>
+		<script type="text/javascript" src="src/tile_engine.js"></script>
+		<script type="text/javascript" src="src/input_handler.js"></script>
+		<style type="text/css"> 
+            #screen {border: 2px solid #000;}
+        </style>
+		<script type="text/javascript">
+
+			var map = [0 , 1, 2, 3, 4, 5,
+					   6 , 7, 8, 9,10,11,
+					   12,13,14,15,12,13,
+					   18,19,20,21,22,23,
+					   24,25,26,27,28,29,
+					   30,31,32,33,34,35,
+					   36,37,38,39,40,41];
+					   
+			
+			window.onload = function()
+			{
+			    var canvas = document.getElementById('screen');
+				var ctx = canvas.getContext('2d');
+				
+				var man = new AssetManager();
+				man.queueDownload("res/map.png");
+				
+				var ih = new InputHandler(canvas);
+				var keymap = {87 : 'up',
+							  65 : 'left',
+						      83 : 'down',
+			 	              68 : 'right'};
+				
+				var pos = new Vector2D(0,0);
+				
+				var that = man;
+				man.downloadAll(function()
+				{
+					var tile_eng = new TileEngine(that.getAsset("res/map.png"),
+												  {x:10,y:10},
+												  {x:6,y:7});
+					tile_eng.loadMap(map);
+					tile_eng.setViewPort({x:0,y:0},
+									     {x:40,y:40});
+					tile_eng.render(ctx);
+					var cont = {};
+					cont.changeKey = function(key, state)
+					{
+						//alert("wtf");
+						if (state)
+						{
+							if (keymap[key] == 'up')
+							{
+								pos = pos.add(new Vector2D(0,-10));
+							}
+							if (keymap[key] == 'left')
+							{
+								pos = pos.add(new Vector2D(-10,0));
+							}
+							if (keymap[key] == 'down')
+							{
+								pos = pos.add(new Vector2D(0,10));
+							}
+							if (keymap[key] == 'right')
+							{
+								pos = pos.add(new Vector2D(10,0));
+							}
+							if (pos.x + 40 > 50) pos.x = 20;
+							if (pos.y + 40 > 60) pos.y = 30;
+							if (pos.x < 0) pos.x = 0;
+							if (pos.y < 0) pos.y = 0;
+						}
+						tile_eng.setViewPort(pos,
+											{x:40,y:40});
+						tile_eng.render(ctx);
+					
+				}
+				ih.register(cont);
+				ih.start();
+					
+				});
+    		};
+
+        </script> 
+    </head>
+    <body>
+		<div id="content"> 
+            <h1>tds-pqrsjs version 0.00</h1>
+			<canvas id="screen" width="40" height="40">This page requires a browser that supports html5 Canvas.</canvas> 
+        </div>
+    </body>
+</html>
