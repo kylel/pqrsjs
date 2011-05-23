@@ -12,10 +12,10 @@ TileEngine = function(image_panel, tile_size, dimensions)
 	this._tile_size         = tile_size;
 	this._dim               = dimensions;
 
-	this._generateSources();
+	//this.generateSources();
 }
 
-TileEngine.prototype._generateSources = function()
+TileEngine.prototype.generateSources = function()
 {
 	var sources = [];
 	var total = this._dim.x * this._dim.y;
@@ -29,6 +29,7 @@ TileEngine.prototype._generateSources = function()
 		{
 			col=0;
 			row++;
+			if (row >= rows) break;
 		}
 		
 		var src_x = col * this._tile_size.x;
@@ -55,20 +56,25 @@ TileEngine.prototype.loadMap = function(map)
 	var row = 0;
 	var col = 0;
 	var pos    = new Vector2D(0,0);
-	var offset = new Vector2D(0,0);
+
 	for (var i=0; i<this._map.length; i++)
 	{
 		row = parseInt(i / this._dim.x);
 		col = parseInt(i % this._dim.x);
 		pos = new Vector2D(this._tile_size.x * col, this._tile_size.y * row);
-		offset = new Vector2D(0,0);//(this._tile_size.x, this._tile_size.y);
-		pos = pos.add(offset);
 		this._tiles.push(new Tile(pos, this._tile_size.x, this._tile_size.y, this._map[i]));
 	}
 }
 
 TileEngine.prototype.setViewPort = function(position, dimensions)
 {
+	if (this._viewport)
+	{	
+		if (this._viewport.pos.x == position.x &&
+			this._viewport.pos.y == position.y &&
+			this._viewport.dim.x == dimensions.x && 
+			this._viewport.dim.y == dimensions.y) return;
+	}
 	this._viewport = {pos:position, dim:dimensions};
 	var cols = parseInt(dimensions.x / this._tile_size.x) + 1;
 	var rows = parseInt(dimensions.y / this._tile_size.y) + 1;
@@ -89,14 +95,6 @@ TileEngine.prototype.setViewPort = function(position, dimensions)
 		if (row >= this._dim.y) continue;
 		if (col >= this._dim.x) continue;
 		var index = row * this._dim.x + col;
-		if (index >= this._tiles.length)
-		{
-			alert("hmmmm");
-		}
-		if (index < 0)
-		{
-			alert("hmmmm");
-		}
 		viewport_ctx.drawImage(this._sources[this._tiles[index].src_index],
 							   parseInt(i % cols) * this._tile_size.x,
 							   parseInt(i / cols) * this._tile_size.y);

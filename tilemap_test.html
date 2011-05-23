@@ -48,6 +48,7 @@
 					var tile_eng = new TileEngine(that.getAsset("res/map.png"),
 												  {x:10,y:10},
 												  {x:6,y:7});
+					tile_eng.generateSources();
 					tile_eng.loadMap(map);
 					tile_eng.setViewPort({x:0,y:0},
 									     {x:40,y:40});

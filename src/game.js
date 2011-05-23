@@ -53,7 +53,7 @@ Game.prototype.draw = function ()
 {
     this._canvasBufferContext.fillStyle = '#fff';
     this._canvasBufferContext.fillRect(0,0,this.canvas.width,this.canvas.height); //clear buffer
-    for (var index in this._visibles)
+    for (var index=0; index < this._visibles.length; index++)
     {
         this._visibles[index].render(this._canvasBufferContext);
     }
@@ -70,9 +70,14 @@ Game.prototype.resume = function ()
     this._paused = false;
 }
 
-Game.prototype.add = function (game_obj)
+Game.prototype.add = function (game_obj, background)
 {
-    if (game_obj.render) this._visibles.push(game_obj);
+    background = typeof(background) != 'undefined' ? background: false;
+	if (game_obj.render)
+	{
+		if (background) this._visibles.unshift(game_obj);
+		else this._visibles.push(game_obj);
+	}
 	if (game_obj.update) this._actives.push(game_obj);
 }
 
