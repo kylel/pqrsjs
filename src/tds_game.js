@@ -106,7 +106,8 @@ Gun.prototype.render = function(ctx)
 Player = function (pos,game)
 {
 	this._game = game;
-	this._pos = pos;
+	this._pos = new Vector2D(760/2,640/2);
+	this._game_pos = new Vector2D();
 	this._game.add(this);
 
 	this._weapon = new Gun(game, "launcher", this, 10, 500);
@@ -141,12 +142,15 @@ Player.prototype.update = function (dt)
 	this._vel.x = this._keys.right - this._keys.left;
 	this._vel = this._vel.multiply(80);
 			
-	this._pos = this._pos.add(this._vel.multiply(dt));
+	this._game_pos = this._game_pos.add(this._vel.multiply(dt));
 	var direction = this._vel.unit();
 	
 	if (this._vel.magnitude() > 0) this._feet.angle = Math.atan2(direction.x,direction.y);
 		
 	this._feet.setPosition (this._pos);
+	
+	this._game.tile_engine.setViewPort(this._game_pos,{x:760,y:640});
+	
 	this._time += dt;
 
 	if (this._time >= this._step && this._vel.magnitude() > 0)
@@ -215,6 +219,7 @@ TdsGame = function (canvas, ih)
 
 	/*CAUTION HACK AHEAD!!!! TODO - cleanup*/
 	this._start = this.start;
+	var that = this;
 	this.ready = function()
 	{
 		var map = [0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,
@@ -282,7 +287,6 @@ TdsGame = function (canvas, ih)
 				   0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,
 				   0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,];
 		that.player.loadContent();
-		that._start.call(that);
 		that.tile_engine = new TileEngine(that.asset_manager.getAsset("res/map.png"),
 												  {x:10,y:10},
 												  {x:76,y:64});
@@ -291,9 +295,9 @@ TdsGame = function (canvas, ih)
 					that.tile_engine.setViewPort({x:0,y:0},
 									     {x:760,y:640});
 		that.add(that.tile_engine, true);
-					
+		that._start.call(that);
 	}
-	var that = this;
+	//var that = this;
 	this.start = function ()
 	{
 		that.asset_manager.downloadAll(that.ready);

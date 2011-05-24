@@ -68,6 +68,7 @@ TileEngine.prototype.loadMap = function(map)
 
 TileEngine.prototype.setViewPort = function(position, dimensions)
 {
+	//TODO - refactor and cleanup
 	if (this._viewport)
 	{	
 		if (this._viewport.pos.x == position.x &&
@@ -103,6 +104,19 @@ TileEngine.prototype.setViewPort = function(position, dimensions)
 		
 	this._sx = position.x % this._tile_size.x;
 	this._sy = position.y % this._tile_size.y;
+	this._dx = 0;
+	this._dy = 0;
+	if (position.x < 0)
+	{
+		this._dx = 0 - position.x;
+		this._sx = 0;
+	}
+	if (position.y < 0)
+	{
+		this._dy = 0 - position.y;
+		this._sy = 0;
+	}
+	
 	this._sw = dimensions.x;
 	this._sh = dimensions.y;
 	this._vw = dimensions.x;
@@ -111,6 +125,6 @@ TileEngine.prototype.setViewPort = function(position, dimensions)
 
 TileEngine.prototype.render = function(ctx)
 {
-	ctx.drawImage(this._visible, this._sx, this._sy, this._sw, this._sh, 0, 0, this._vw, this._vh);
+	ctx.drawImage(this._visible, this._sx, this._sy, this._sw, this._sh, this._dx, this._dy, this._vw, this._vh);
 }
 
