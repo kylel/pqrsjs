@@ -1,3 +1,19 @@
+GameObject = function ()
+{
+	this.toRemove = false;
+}
+
+GameObject.prototype.draw = function (ctx)
+{
+	alert("unimplemented abstract method");
+}
+
+GameObject.prototype.update = function (dt)
+{
+	alert("unimplemented abstract method");
+}
+
+
 window.requestAnimFrame = (function(){
 	return 	window.requestAnimationFrame		||
 			window.webkitRequestAnimationFrame	||
@@ -52,10 +68,14 @@ Game.prototype.update = function (dt)
 Game.prototype.draw = function ()
 {
     this._canvasBufferContext.fillStyle = '#fff';
-    this._canvasBufferContext.fillRect(0,0,this.canvas.width,this.canvas.height); //clear buffer
+	//this.ctx.fillStyle = '#fff';
+    //this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height); //clear buffer
+	this._canvasBufferContext.fillRect(0,0,this.canvas.width,this.canvas.height); //clear buffer
+	//this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height); //clear buffer
     for (var index=0; index < this._visibles.length; index++)
     {
         this._visibles[index].render(this._canvasBufferContext);
+		//this._visibles[index].render(this.ctx);
     }
     this.ctx.drawImage(this._canvasBuffer, 0, 0); //double buffering
 }

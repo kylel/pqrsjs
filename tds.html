@@ -6,15 +6,19 @@
 		<meta name="author" content="Kyle Ludwig" /> 
         <meta name="Content-Script-Type" content="text/javascript" /> 
         <meta name="Content-Style-Type" content="text/css" />
-        <script type="text/javascript" src="src/primitives.js"></script>
+        <script type="text/javascript" src="src/primitive.js"></script>
 		<script type="text/javascript" src="src/geometry.js"></script>
 		<script type="text/javascript" src="src/input_handler.js"></script>
 		<script type="text/javascript" src="src/timer.js"></script>
-		<script type="text/javascript" src="src/sprites.js"></script>
+		<script type="text/javascript" src="src/sprite.js"></script>
 		<script type="text/javascript" src="src/asset_manager.js"></script>
-		<script type="text/javascript" src="src/game.js"></script>
+		<script type="text/javascript" src="src/basic_game.js"></script>
+		<script type="text/javascript" src="src/agame.js"></script>
 		<script type="text/javascript" src="src/tile_engine.js"></script>
+		<script type="text/javascript" src="src/world.js"></script>
+		<script type="text/javascript" src="src/camera.js"></script>
 		<script type="text/javascript" src="src/tds_game.js"></script>
+		<script type="text/javascript" src="src/background.js"></script>
 		
 		<style type="text/css"> 
             #screen {border: 2px solid #000;}
@@ -26,11 +30,11 @@
 			    var canvas = document.getElementById('screen');
 				canvas.onmouseover=function () {this.style.cursor = 'none';};
 			    var ctx = canvas.getContext('2d');
-				
+				//console.log("dslkjhgoiahsdoigjhjaskljdfhjalkoshjdgflajsoidfjaosjdfoiajsoidfjsiajdfoijasodijfiosjdfiojodi");
 				var ih = new InputHandler(canvas);
 				var tds_game = new TdsGame(canvas, ih);
-				
-				tds_game.start();
+				tds_game.loadContent(function(){tds_game.start();});
+				//tds_game.start();
 				
     		};
 

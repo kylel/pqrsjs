@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>pqrsjs</title>
+		<meta name="author" content="Kyle Ludwig" /> 
+        <meta name="Content-Script-Type" content="text/javascript" /> 
+        <meta name="Content-Style-Type" content="text/css" />
+		<script type="text/javascript" src="src/geometry.js"></script>
+		<script type="text/javascript" src="src/timer.js"></script>
+		<script type="text/javascript" src="src/basic_game.js"></script>
+		<script type="text/javascript" src="src/world.js"></script>
+		<script type="text/javascript" src="src/camera.js"></script>
+		<script type="text/javascript" src="src/primitives.js"></script>
+		
+		
+		<style type="text/css"> 
+            #screen {border: 2px solid #000;}
+        </style>
+		<script type="text/javascript">
+
+			window.onload = function()
+			{
+			    var canvas = document.getElementById('screen');
+				var ctx = canvas.getContext('2d');
+				
+				var game = new BasicGame(canvas);
+				var camera = new Camera(canvas);
+				var world = new World(new Vector2D(canvas.width*10, canvas.height*10));
+				camera.setPosition(new Vector2D(canvas.width/2, canvas.height/2));
+				var vis    = new Visible();
+
+				var rwall = new Visible(true);
+				rwall.setPosition(new Vector2D(canvas.width*10-10, canvas.height*10/2));
+				rwall.createBoundingBox(0,canvas.height*10);
+				rwall._render = function(ctx){draw_line(ctx, new Vector2D(0, canvas.height*10/2), new Vector2D(0, -canvas.height*10/2), '#f00');};
+				
+				var lwall = new Visible(true);
+				lwall.setPosition(new Vector2D(10, canvas.height*10/2));
+				lwall.createBoundingBox(0,canvas.height*10);
+				lwall._render = function(ctx){draw_line(ctx, new Vector2D(0, canvas.height*10/2), new Vector2D(0, -canvas.height*10/2), '#f00');};
+
+				var twall = new Visible(true);
+				twall.setPosition(new Vector2D(canvas.width*10/2, 10));
+				twall.createBoundingBox(canvas.width*10,0);
+				twall._render = function(ctx){draw_line(ctx, new Vector2D(canvas.width*10/2, 0), new Vector2D(-canvas.width*10/2, 0), '#f00');};
+				
+				var bwall = new Visible(true);
+				bwall.setPosition(new Vector2D(canvas.width*10/2, canvas.height*10-10));
+				bwall.createBoundingBox(canvas.width*10,0);
+				bwall._render = function(ctx){draw_line(ctx, new Vector2D(canvas.width*10/2, 0), new Vector2D(-canvas.width*10/2, 0), '#f00');};
+				camera.follow(vis);
+				vis.setPosition(new Vector2D(canvas.width/2, canvas.height/2));
+				vis._render = function(ctx){draw_circle(ctx, 0, 0, 25, '#0f0');trace_rectangle(ctx, -25, -25, 50, 50, '#f00');};
+				vis.createBoundingBox(50,50);
+				vis.collision = function(body)
+				{
+					var cpos = body.getPosition();
+					//alert(boundingBoxCollision(this, body).y);
+					//alert(boundingBoxCollision(this, body).x);
+					if ((cpos.x == canvas.width*10-10) &&  (this.vel.x > 0)) this.vel = this.vel.multiply(new Vector2D(-1,1));
+					if ((cpos.y == 10) &&  (this.vel.y < 0)) this.vel = this.vel.multiply(new Vector2D(1,-1));
+					if ((cpos.x == 10) &&  (this.vel.x < 0)) this.vel = this.vel.multiply(new Vector2D(-1,1));
+					if ((cpos.y == canvas.height*10-10) &&  (this.vel.y > 0)) this.vel = this.vel.multiply(new Vector2D(1,-1));
+					//this.setPosition(new Vector2D(200,200));
+				};
+				vis.registerCallback("box_collision", function(body)
+				{
+					vis.collision(body);
+				});
+				//vis.draw = function(ctx){return};
+				game.add(world);
+				world.add(vis);
+				world.add(rwall);camera.add(rwall,1);
+				world.add(lwall);camera.add(lwall,1);
+				world.add(twall);camera.add(twall,1);
+				world.add(bwall);camera.add(bwall,1);
+				//camera.addZPlane("main", 0);
+				camera.add(vis, 0);
+				game.add(camera);
+				//game.add(vis);
+				vis.setVelocity(new Vector2D(-500,-500));
+
+				game.start();
+				
+    		};
+
+        </script> 
+    </head>
+    <body>
+		<div id="content"> 
+            <h1>tds-pqrsjs version 0.00</h1>
+			<canvas id="screen" width="760" height="640">This page requires a browser that supports html5 Canvas.</canvas> 
+        </div>
+    </body>
+</html>

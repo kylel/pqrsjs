@@ -1,16 +1,20 @@
+DEBUG=true;
+if (DEBUG) debug = function (msg) {console.log(msg);};
+else debug = function (msg) {console.log(msg);};
 
 /**
   * class Sprite
   * 
   */
-
-Sprite = function (x,y,image)
+Sprite = function (image)
 {
-    Primitive.call(this,x,y);
-	this._img = image;
-	this._data = {sx:0, sy:0,
-				  sw:image.naturalWidth, sh:image.naturalHeight,
-				  dw:image.naturalWidth, dh:image.naturalHeight};
+	debug("creating new sprite");
+	Primitive.call(this);
+	this.img = image || new Image();
+	this.data = {sx:0, sy:0,
+				 sw:this.img.naturalWidth, sh:this.img.naturalHeight,
+			     dw:this.img.naturalWidth, dh:this.img.naturalHeight};
+	this.offset = new Vector2D();
 }
 
 Sprite.prototype = new Primitive;
@@ -20,12 +24,13 @@ Sprite.prototype = new Primitive;
  */
 Sprite.prototype.load = function (data)
 {
-    this._data.sx = data.sx;
-	this._data.sy = data.sy;
-	this._data.sw = data.sw;
-	this._data.sh = data.sh;
-	this._data.dw = data.dw;
-	this._data.dh = data.dh;
+    debug("loading sprite data");
+	this.data.sx = data.sx;
+	this.data.sy = data.sy;
+	this.data.sw = data.sw;
+	this.data.sh = data.sh;
+	this.data.dw = data.dw;
+	this.data.dh = data.dh;
 }
 
 /*Sprite.prototype.scale = function (factor)
@@ -38,9 +43,11 @@ Sprite.prototype.load = function (data)
 /**
  * 
  */
-Sprite.prototype.set_anchor = function ()
+Sprite.prototype.setAnchor = function (offset)
 {
-    alert("NOT YET IMPLEMENTED");
+	debug("setting anchor to:",this.data.dw/2,",",this.data.dh/2);
+	this.offset = offset || new Vector2D(this.data.dw/2, this.data.dh/2);
+	this.offset = new Vector2D().subtract(this.offset);   
 }
 
 
@@ -49,13 +56,11 @@ Sprite.prototype.set_anchor = function ()
  */
 Sprite.prototype._render = function (ctx)
 {
-	var top_left = {x:-this._data.dw/2, y:-this._data.dh/2};
-	ctx.translate(top_left.x, top_left.y);
-	ctx.drawImage(this._img, 
-	              this._data.sx, this._data.sy, 
-				  this._data.sw, this._data.sh, 
-				  0, 0, 
-				  this._data.dw, this._data.dh);
+	ctx.drawImage(this.img, 
+	              this.data.sx, this.data.sy, 
+				  this.data.sw, this.data.sh, 
+				  this.offset.x, this.offset.y, 
+				  this.data.dw, this.data.dh);
 }
 
 
@@ -64,7 +69,7 @@ Sprite.prototype._render = function (ctx)
   * class Animation
   * 
   */
-Animation = function(x,y,image)
+/*Animation = function(x,y,image)
 {
 	Primitive.call(this,x,y);
 	this._img = image;
@@ -96,11 +101,11 @@ Animation.prototype.update = function(dt)
 Animation.prototype._render = function (ctx)
 {
     var data = this._frames[this._frame_index];
-	/*if (!this._img.loaded) 
-    {
-        alert("image not yet loaded");
-        return;
-    }*/
+	//if (!this._img.loaded) 
+   // {
+   //     alert("image not yet loaded");
+   //     return;
+   // }
     var top_left = {x:-data.dw/2, y:-data.dh/2};
     ctx.translate(top_left.x, top_left.y);
 	ctx.drawImage(this._img, 
@@ -132,3 +137,4 @@ create_frame_list = function (image, total, size, dt)
 	} 
 	return frames;
 }
+*/

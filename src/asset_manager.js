@@ -31,7 +31,8 @@ AssetManager.prototype.downloadAll = function(callback)
 			that._error_count += 1;
 			if (that._isDone()) callback();
 		});*/
-		img.onload = function() { /*add event listener not working for firefox*/
+		img.onload = function() { /*add event listener not working for firefox*///TODO - is it really
+		
 			that._success_count += 1;
 			if (that._isDone()) callback();
 		};

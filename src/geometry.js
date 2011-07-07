@@ -3,7 +3,7 @@
  */
 Vector2D = function (x,y)
 {
-    this.x = x||0;
+	this.x = x||0;
     this.y = y||0;
 }
 
@@ -128,8 +128,30 @@ Vector2D.prototype.compare = function(vector2)
 	if (mag1 >  mag2) return  1;
 }
 
+/**
+ * BoundingBox Class
+ */
+BoundingBox = function(left, right, top, bottom)
+{
+	this.left   = left   || 0;
+	this.right  = right  || 0;
+	this.top    = top    || 0;
+	this.bottom = bottom || 0;
+}
+
+/**
+ * BoundingCircle Class
+ */
+BoundingCircle = function(centre, radius)
+{
+	this.centre = centre || new Vector2D();
+	this.r      = radius || 0;
+}
+
 
 //FUNCTIONS------------------------------------------------------------------------------------------------
+
+
 
 /**
  * Find the distance between two points

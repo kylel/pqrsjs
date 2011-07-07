@@ -128,3 +128,8 @@ TileEngine.prototype.render = function(ctx)
 	ctx.drawImage(this._visible, this._sx, this._sy, this._sw, this._sh, this._dx, this._dy, this._vw, this._vh);
 }
 
+TileEngine.prototype.render = function(ctx, pos)
+{
+	ctx.drawImage(this._visible, this._sx, this._sy, this._sw, this._sh, this._dx, this._dy, this._vw, this._vh);
+}
+
