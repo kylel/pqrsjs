@@ -63,10 +63,10 @@ InputHandler.prototype.start = function ()
 	document.onmousedown = function(e) {that._mouseClick((e||window.event).clientX, (e||window.event).clientY, 1);};
 	document.onmouseup   = function(e) {that._mouseClick((e||window.event).clientX, (e||window.event).clientY, 0);};
 	*/
-	document.addEventListener("keydown",   function(e) {that._changeKey((e||window.event).keyCode, 1);});//,                             false);
-    document.addEventListener("keyup",     function(e) {that._changeKey((e||window.event).keyCode, 0);});//,                             false);
-	document.addEventListener("mousemove", function(e) {that._mouseMove ((e||window.event).clientX, (e||window.event).clientY);});//,    false);
-	document.addEventListener("mousedown", function(e) {that._mouseClick((e||window.event).clientX, (e||window.event).clientY, 1);});//, false);
-	document.addEventListener("mouseup",   function(e) {that._mouseClick((e||window.event).clientX, (e||window.event).clientY, 0);});//, false);
+	document.addEventListener("keydown",   function(e) {that._changeKey((e||window.event).keyCode, 1);},                             false);
+    document.addEventListener("keyup",     function(e) {that._changeKey((e||window.event).keyCode, 0);},                             false);
+	document.addEventListener("mousemove", function(e) {that._mouseMove ((e||window.event).clientX, (e||window.event).clientY);},    false);
+	document.addEventListener("mousedown", function(e) {that._mouseClick((e||window.event).clientX, (e||window.event).clientY, 1);}, false);
+	document.addEventListener("mouseup",   function(e) {that._mouseClick((e||window.event).clientX, (e||window.event).clientY, 0);}, false);
 }
 
