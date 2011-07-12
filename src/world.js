@@ -29,7 +29,7 @@ Body.prototype.registerCallback = function (type, cb)
 	if (!type)
 	{
 		this.bcCallback = null;
-		this.bcCallback = null;
+		this.bbCallback = null;
 	}
 	else if (type == "circle_collision")
 		this.bcCallback = cb || null;
@@ -150,7 +150,7 @@ Body.prototype.onWorldExit = function()
 /**
  * Called when the body collides with another.
  */
-Body.prototype.onCicleCollision = function(body)
+Body.prototype.onCircleCollision = function(body)
 {
 	if (this.bcCallback) this.bcCallback(body);
 	return;

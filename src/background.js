@@ -43,10 +43,10 @@ Background.prototype.update = function (dt)//TODO - refactor
 	{
 		this.toDraw = false;
 	}
-	console.log("bg src = ", this.src.x, ",", this.src.y);
-	console.log("bg srcSize = ", this.srcSize.x, ",", this.srcSize.y);
-	console.log("bg dst = ", this.dst.x, ",", this.dst.y);
-	console.log("bg dstSize = ", this.dstSize.x, ",", this.dstSize.y);
+	//console.log("bg src = ", this.src.x, ",", this.src.y);
+	//console.log("bg srcSize = ", this.srcSize.x, ",", this.srcSize.y);
+	//console.log("bg dst = ", this.dst.x, ",", this.dst.y);
+	//console.log("bg dstSize = ", this.dstSize.x, ",", this.dstSize.y);
 }
 
 Background.prototype.render = function (ctx, position)

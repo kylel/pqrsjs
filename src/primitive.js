@@ -152,6 +152,12 @@ Circle.prototype._render = function (ctx)
  */
 function draw_circle(ctx, x, y, r, color)
 {
+	//console.log("ctx -- ", ctx);
+	//console.log("x -- ", x);
+	//console.log("y -- ", y);
+	//console.log("r -- ", r);
+	//console.log("color -- ", color);
+	
 	ctx.fillStyle = color; 
     ctx.beginPath();
     ctx.moveTo(x + r, y);

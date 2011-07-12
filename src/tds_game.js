@@ -65,13 +65,18 @@ var map = [0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4
 
 
 				   
-Alien = function (game, pos, speed)
+Alien = function (game, pos, speed, color)
 {
 	Visible.call(this, game, false);
 	this.game = game;
 	this.setPosition(pos);
 	this.target = this.game.player;
 	this.speed = speed || 10;
+	var that = this;
+	this.createBoundingCircle(10);
+	this.registerCallback("circle_collision", that.circColision);
+	this.health = 100;
+	this.color = color || 'rgb(100, 100, 100)';
 }
 
 Alien.prototype = new Visible();
@@ -91,7 +96,24 @@ Alien.prototype.draw = function (ctx)
 
 Alien.prototype._render = function (ctx)
 {
-	draw_circle(ctx, 0, 0, 10, '#00f');
+	draw_circle(ctx, 0, 0, 10, this.color);//'#00f');
+}
+
+Alien.prototype.die = function ()
+{
+	this.toRemove = true;
+}
+
+Alien.prototype.circColision = function(body)
+{
+	if (body instanceof Bullet)
+	{
+		this.health = this.health - 25;
+		if (this.health <= 0)
+		{
+			this.die();
+		}
+	}
 }
 
 //function world_to_camera(world_pos)
@@ -116,6 +138,8 @@ Bullet = function (game, pos, vel)
 	this.setPosition(pos);
 	this.setVelocity(vel);
 	var that = this;
+	this.createBoundingCircle(5);
+	this.registerCallback("circle_collision", that.circColision);
 	this.registerCallback("world_exit", function(){that.toRemove = true;});
 }
 
@@ -136,6 +160,19 @@ Bullet.prototype.draw = function(ctx)
 
 Bullet.prototype.loadContent = function()
 {
+}
+
+Bullet.prototype.impact = function()
+{
+	this.toRemove = true;
+}
+
+Bullet.prototype.circColision = function(body)
+{
+	if (body instanceof Alien)
+	{
+		this.impact();
+	}
 }
 
 /**
@@ -301,6 +338,58 @@ Player.prototype.draw = function(ctx)
 }
 
 
+Spawner = function (game)
+{
+	GameObject.call(this, game);
+	this.threshold = 10;
+	this.timer = 0;
+}
+
+Spawner.prototype = new GameObject();
+
+Spawner.prototype.draw = function (ctx)
+{
+}
+
+Spawner.prototype.update = function (dt)
+{
+	this.timer = this.timer + dt;
+	if (this.timer >= this.threshold)
+	{
+		var worldSize = this.game.world.getSize();
+		var cameraTop = this.game.camera.getTopLeft();
+		var cameraBottom = this.game.camera.getBottomRight();
+		this.timer = 0;
+		var x = Math.floor(Math.random()*worldSize.x);
+		var y = Math.floor(Math.random()*worldSize.y);
+		
+		while (x > cameraTop.x && x < cameraBottom.x)
+		{
+			if (y > cameraTop.y && y < cameraBottom.y)
+			{
+				x = Math.floor(Math.random()*worldSize.x);
+				y = Math.floor(Math.random()*worldSize.y);
+			}
+			else
+			{
+				break;
+			}
+		}
+		var speed = Math.floor(Math.random()*75);
+		//var color = Math.floor(Math.random()*4095);
+		var r = Math.floor(Math.random()*255);
+		var g = Math.floor(Math.random()*255);
+		var b = Math.floor(Math.random()*255);
+		var color = 'rgb(' + r + ', ' + g + ', ' + b + ')';
+		this.game.add(new Alien(this.game, new Vector2D(x,y), speed, color));
+	}
+}
+
+Spawner.prototype.loadContent = function ()
+{
+}
+
+
 /**
   * class TdsGame
   * 
@@ -323,6 +412,7 @@ TdsGame = function (canvas, ih)
 	this.player = new Player(this, centre);
 	this.enemy = new Alien(this, new Vector2D(100,100));
 	this.add(this.enemy);
+	this.add(new Spawner(this));
 
 	camera.follow(this.player);
 

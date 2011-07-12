@@ -201,7 +201,13 @@ Line.prototype.change = function (a,b,color)
  */
 function draw_circle(ctx, x, y, r, color)
 {
-	ctx.fillStyle = color; 
+	console.log("ctx -- ", ctx);
+	console.log("x -- ", x);
+	console.log("y -- ", y);
+	console.log("r -- ", r);
+	console.log("color -- ", color);
+	
+	ctx.fillStyle = color || "rgb(10,10,255)"; 
     ctx.beginPath();
     ctx.moveTo(x + r, y);
     ctx.arc(x, y, r, 0, Math.PI*2, true);

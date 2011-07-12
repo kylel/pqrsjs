@@ -178,7 +178,7 @@ Camera.prototype.update = function(dt)
 		else
 			this.visibles[i].toDraw = false;
 	}
-	console.log("camera pos = ", this.pos.x, ",", this.pos.y);
+	//console.log("camera pos = ", this.pos.x, ",", this.pos.y);
 }
 
 //FUNCTIONS ----
