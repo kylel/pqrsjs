@@ -288,7 +288,7 @@ Player.prototype.update = function (dt)
 	}
 
 	var vel = new Vector2D(this._keys.right - this._keys.left, this._keys.down  - this._keys.up);
-	vel = vel.multiply(80);
+	vel = vel.multiply(120);
 	this.setVelocity(vel);
 			
 	if (this.vel.magnitude() > 0) this.feet.angle = Math.atan2(vel.x,vel.y);
