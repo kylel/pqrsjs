@@ -25,8 +25,8 @@
 				var ctx = canvas.getContext('2d');
 				
 				var game = new BasicGame(canvas);
-				var camera = new Camera(canvas);
 				var world = new World(new Vector2D(canvas.width*10, canvas.height*10));
+				var camera = new Camera(game, canvas, world);
 				camera.setPosition(new Vector2D(canvas.width/2, canvas.height/2));
 				var vis    = new Visible();
 

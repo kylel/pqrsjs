@@ -8,6 +8,7 @@ Body = function (game, isStatic)
 	this.pos = new Vector2D();
 	this.vel = new Vector2D();
 	this.acc = null;
+	this.maxvel = null;
 	this.isStatic = isStatic || false;
 	this.bb_dim = new Vector2D();
 	this.bb_r   = 0;
@@ -116,7 +117,7 @@ Body.prototype.stepBack = function(dt)
 	}
 	else
 	{
-		this.undoUpdate();
+		this.undoStep();
 	}
 }
 
@@ -186,7 +187,7 @@ Body.prototype.setVelocity = function(vel)
  * Set the max velocity of the body.
  * position and acceleration are maintained.
  */
-Body.prototype.setMaxVelocity = function(vel)
+Body.prototype.setMaxVelocity = function(maxvel)
 {
 	this.maxvel = maxvel || null;
 }
@@ -197,7 +198,7 @@ Body.prototype.setMaxVelocity = function(vel)
  */
 Body.prototype.setAcc = function(acc)
 {
-	this.vel = vel || null;
+	this.acc = acc || null;
 }
 
 
@@ -278,7 +279,7 @@ World.prototype.stepBack = function(dt)
 	for (var index in this.bodies)
     {
         if (dt) this.bodies[index].stepBack(dt);
-		else this.bodies[index].undoStep(dt);
+		else this.bodies[index].undoStep();
     }
 }
 

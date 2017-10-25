@@ -144,8 +144,10 @@ Camera.prototype.cameraToWorld = function(cameraPos)
 
 Camera.prototype.canSee = function(visible)
 {
-	if (boundingBoxCollision(this, visible)) return true;
-	return false;
+	//return boundingBoxCollision(this, visible) ? true : false;
+	return boundingBoxCollision(this, visible);
+	//if (boundingBoxCollision(this, visible)) return true;
+	//return false;
 }
 
 Camera.prototype.bindToWorld = function()
@@ -171,12 +173,14 @@ Camera.prototype.update = function(dt)
 		if (bottomRight.y > worldSize.y) this.pos.y = worldSize.y - this.canvas.height/2;
 	}
 
-	for (var i=0; i<this.visibles.length; i++)
+	var limit = this.visibles.length;
+	for  ( var i=0; i<limit; i++ )
 	{
-		if (this.canSee(this.visibles[i]))
+		/*if (this.canSee(this.visibles[i]))
 			this.visibles[i].toDraw = true;
 		else
-			this.visibles[i].toDraw = false;
+			this.visibles[i].toDraw = false;*/
+		this.visibles[i].toDraw = this.canSee ( this.visibles[i] );
 	}
 	//console.log("camera pos = ", this.pos.x, ",", this.pos.y);
 }

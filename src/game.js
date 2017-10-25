@@ -1,3 +1,15 @@
+
+window.requestAnimFrame = (function(){
+	return 	window.requestAnimationFrame		||
+			window.webkitRequestAnimationFrame	||
+			window.mozRequestAnimationFrame		||
+			window.oRequestAnimationFrame		||
+			window.msRequestAnimationFrame		||
+			function (callback, element){
+				window.setTimeout(callback, 1000/60);
+			};
+})();
+
 GameObject = function ()
 {
 	this.toRemove = false;
@@ -14,16 +26,6 @@ GameObject.prototype.update = function (dt)
 }
 
 
-window.requestAnimFrame = (function(){
-	return 	window.requestAnimationFrame		||
-			window.webkitRequestAnimationFrame	||
-			window.mozRequestAnimationFrame		||
-			window.oRequestAnimationFrame		||
-			window.msRequestAnimationFrame		||
-			function (callback, element){
-				window.setTimeout(callback, 1000/60);
-			};
-})();
 
 /**
   * class Game
@@ -103,17 +105,17 @@ Game.prototype.add = function (game_obj, background)
 
 Game.prototype.remove = function (game_obj)
 {
-    var i = -1;
-	if (game_obj.render)
+    var i=-1;
+	if ( game_obj.render )
 	{
-		i = this._visibles.indexOf(game_obj);
-        if (i!=-1) this._visibles.splice(i, 1);
+		i = this._visibles.indexOf( game_obj );
+        if ( i!=-1 ) this._visibles.splice( i, 1 );
 	}
 	
-	if (game_obj.update)
+	if ( game_obj.update )
     {
-        i = this._actives.indexOf(game_obj);
-        if (i!=-1) this._actives.splice(i, 1);
+        i = this._actives.indexOf( game_obj );
+        if ( i!=-1 ) this._actives.splice( i, 1 );
     }
 }
 
